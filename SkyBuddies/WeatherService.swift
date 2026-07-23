@@ -15,19 +15,18 @@ class WeatherService {
         isLoading = true
         errorMessage = nil
 
-        let urlString = """
-        https://api.open-meteo.com/v1/forecast?\
-        latitude=\(latitude)&longitude=\(longitude)\
-        &current=temperature_2m,relative_humidity_2m,apparent_temperature,is_day,precipitation,weather_code,\
-        cloud_cover,pressure_msl,surface_pressure,wind_speed_10m,wind_direction_10m,wind_gusts_10m,\
-        uv_index,visibility\
-        &hourly=temperature_2m,precipitation_probability,weather_code,wind_speed_10m,precipitation\
-        &daily=weather_code,temperature_2m_max,temperature_2m_min,sunrise,sunset,precipitation_sum,\
-        wind_speed_10m_max\
-        &timezone=auto&forecast_days=35
-        """
+        var components = URLComponents(string: "https://api.open-meteo.com/v1/forecast")!
+        components.queryItems = [
+            URLQueryItem(name: "latitude",  value: String(latitude)),
+            URLQueryItem(name: "longitude", value: String(longitude)),
+            URLQueryItem(name: "current",   value: "temperature_2m,relative_humidity_2m,apparent_temperature,is_day,precipitation,weather_code,cloud_cover,pressure_msl,surface_pressure,wind_speed_10m,wind_direction_10m,wind_gusts_10m,uv_index,visibility"),
+            URLQueryItem(name: "hourly",    value: "temperature_2m,precipitation_probability,weather_code,wind_speed_10m,precipitation"),
+            URLQueryItem(name: "daily",     value: "weather_code,temperature_2m_max,temperature_2m_min,sunrise,sunset,precipitation_sum,wind_speed_10m_max"),
+            URLQueryItem(name: "timezone",      value: "auto"),
+            URLQueryItem(name: "forecast_days", value: "16"),
+        ]
 
-        guard let url = URL(string: urlString) else {
+        guard let url = components.url else {
             errorMessage = "Неверный URL"
             isLoading = false
             return
@@ -37,6 +36,8 @@ class WeatherService {
             let (data, _) = try await URLSession.shared.data(from: url)
             let decoded = try JSONDecoder().decode(OpenMeteoResponse.self, from: data)
             weatherData = parseResponse(decoded, cityName: cityName, latitude: latitude, longitude: longitude)
+        } catch let decodeError as DecodingError {
+            errorMessage = "Ошибка данных: \(decodeError)"
         } catch {
             errorMessage = "Не удалось загрузить погоду: \(error.localizedDescription)"
         }
