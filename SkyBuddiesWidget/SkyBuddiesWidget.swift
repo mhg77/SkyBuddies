@@ -8,7 +8,7 @@ struct WeatherWidgetEntry: TimelineEntry {
     let cityName: String
     let temperature: Int
     let description: String
-    let emoji: String
+    let characterType: WeatherCharacterType
     let minTemp: Int
     let maxTemp: Int
     let humidity: Int
@@ -39,7 +39,7 @@ struct WeatherWidgetProvider: TimelineProvider {
 extension WeatherWidgetEntry {
     static let placeholder = WeatherWidgetEntry(
         date: .now, cityName: "Москва", temperature: 22,
-        description: "Ясно", emoji: "☀️",
+        description: "Ясно", characterType: .sunny,
         minTemp: 16, maxTemp: 26, humidity: 58, windSpeed: 3, pressureMmHg: 758
     )
 }
@@ -53,44 +53,35 @@ enum WidgetWeatherFetcher {
         let lat  = defaults.object(forKey: "sb_widget_lat")  as? Double ?? 55.7558
         let lon  = defaults.object(forKey: "sb_widget_lon")  as? Double ?? 37.6173
 
-        let url = URL(string:
-            "https://api.open-meteo.com/v1/forecast?latitude=\(lat)&longitude=\(lon)" +
-            "&current=temperature_2m,weather_code,relative_humidity_2m,wind_speed_10m,pressure_msl" +
-            "&daily=temperature_2m_max,temperature_2m_min&timezone=auto&forecast_days=1"
-        )!
+        var components = URLComponents(string: "https://api.open-meteo.com/v1/forecast")!
+        components.queryItems = [
+            URLQueryItem(name: "latitude",  value: String(lat)),
+            URLQueryItem(name: "longitude", value: String(lon)),
+            URLQueryItem(name: "current",   value: "temperature_2m,weather_code,relative_humidity_2m,wind_speed_10m,pressure_msl"),
+            URLQueryItem(name: "daily",     value: "temperature_2m_max,temperature_2m_min"),
+            URLQueryItem(name: "timezone",      value: "auto"),
+            URLQueryItem(name: "forecast_days", value: "1"),
+        ]
 
-        guard let (data, _) = try? await URLSession.shared.data(from: url),
+        guard let url = components.url,
+              let (data, _) = try? await URLSession.shared.data(from: url),
               let decoded = try? JSONDecoder().decode(WidgetAPIResponse.self, from: data)
         else { return .placeholder }
 
         let code = decoded.current.weatherCode
+        let temp = decoded.current.temperature2m
         return WeatherWidgetEntry(
             date: .now,
             cityName: city,
-            temperature: Int(decoded.current.temperature2m.rounded()),
+            temperature: Int(temp.rounded()),
             description: description(for: code),
-            emoji: emoji(for: code),
+            characterType: WeatherCharacterType.from(code: code, temperature: temp),
             minTemp: Int((decoded.daily.temperature2mMin.first ?? 0).rounded()),
             maxTemp: Int((decoded.daily.temperature2mMax.first ?? 0).rounded()),
             humidity: decoded.current.relativeHumidity2m,
             windSpeed: Int(decoded.current.windSpeed10m.rounded()),
             pressureMmHg: Int((decoded.current.pressureMsl * 0.750062).rounded())
         )
-    }
-
-    static func emoji(for code: Int) -> String {
-        switch code {
-        case 0:        return "☀️"
-        case 1, 2:     return "🌤️"
-        case 3:        return "☁️"
-        case 45, 48:   return "🌫️"
-        case 51...55:  return "🌦️"
-        case 61...65:  return "🌧️"
-        case 71...77:  return "❄️"
-        case 80...82:  return "🌧️"
-        case 95...99:  return "⛈️"
-        default:       return "🌤️"
-        }
     }
 
     static func description(for code: Int) -> String {
@@ -154,7 +145,7 @@ struct SkyBuddiesWidget: Widget {
         StaticConfiguration(kind: kind, provider: WeatherWidgetProvider()) { entry in
             SkyBuddiesWidgetEntryView(entry: entry)
                 .containerBackground(for: .widget) {
-                    widgetBackground(for: entry.emoji)
+                    widgetBackground(for: entry.characterType)
                 }
         }
         .configurationDisplayName("SkyBuddies")
@@ -163,15 +154,15 @@ struct SkyBuddiesWidget: Widget {
     }
 }
 
-func widgetBackground(for emoji: String) -> LinearGradient {
+func widgetBackground(for type: WeatherCharacterType) -> LinearGradient {
     let colors: [Color]
-    switch emoji {
-    case "☀️":        colors = [Color(hex: "1A7AC4"), Color(hex: "64B8E8")]
-    case "🌤️":        colors = [Color(hex: "3A6A90"), Color(hex: "7AABC8")]
-    case "🌧️", "🌦️": colors = [Color(hex: "2A4860"), Color(hex: "607890")]
-    case "⛈️":        colors = [Color(hex: "181C28"), Color(hex: "384050")]
-    case "❄️":        colors = [Color(hex: "5A7890"), Color(hex: "A0C0D8")]
-    default:          colors = [Color(hex: "5A6878"), Color(hex: "96A8B8")]
+    switch type {
+    case .sunny, .hotSun:        colors = [Color(hex: "1A7AC4"), Color(hex: "64B8E8")]
+    case .partlyCloudy:          colors = [Color(hex: "3A6A90"), Color(hex: "7AABC8")]
+    case .cloudy, .foggy:        colors = [Color(hex: "5A6878"), Color(hex: "96A8B8")]
+    case .rainy, .heavyRain:     colors = [Color(hex: "2A4860"), Color(hex: "607890")]
+    case .snowy:                 colors = [Color(hex: "5A7890"), Color(hex: "A0C0D8")]
+    case .stormy:                colors = [Color(hex: "181C28"), Color(hex: "384050")]
     }
     return LinearGradient(colors: colors, startPoint: .topLeading, endPoint: .bottomTrailing)
 }
@@ -184,14 +175,14 @@ struct SkyBuddiesWidgetEntryView: View {
 
     var body: some View {
         switch family {
-        case .systemSmall: smallView
+        case .systemSmall:  smallView
         case .systemMedium: mediumView
-        default: smallView
+        default:            smallView
         }
     }
 
     var smallView: some View {
-        VStack(alignment: .leading, spacing: 4) {
+        VStack(alignment: .leading, spacing: 2) {
             HStack(spacing: 4) {
                 Image(systemName: "location.fill")
                     .font(.system(size: 10, weight: .semibold))
@@ -202,12 +193,12 @@ struct SkyBuddiesWidgetEntryView: View {
                     .lineLimit(1)
             }
 
-            Text(entry.emoji)
-                .font(.system(size: 52))
+            WeatherCharacterView(type: entry.characterType, size: 62)
+                .frame(width: 62, height: 62)
                 .padding(.vertical, 2)
 
             Text("\(entry.temperature)°")
-                .font(.system(size: 36, weight: .black, design: .rounded))
+                .font(.system(size: 34, weight: .black, design: .rounded))
                 .foregroundColor(.white)
 
             Text(entry.description)
@@ -218,16 +209,17 @@ struct SkyBuddiesWidgetEntryView: View {
             Spacer(minLength: 0)
 
             Text("\(entry.minTemp)° / \(entry.maxTemp)°")
-                .font(.system(size: 12, weight: .semibold))
+                .font(.system(size: 11, weight: .semibold))
                 .foregroundColor(.white.opacity(0.65))
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .leading)
-        .padding(14)
+        .padding(13)
     }
 
     var mediumView: some View {
         HStack(spacing: 0) {
-            VStack(alignment: .leading, spacing: 5) {
+            // Left: character + main info
+            VStack(alignment: .leading, spacing: 4) {
                 HStack(spacing: 4) {
                     Image(systemName: "location.fill")
                         .font(.system(size: 11, weight: .semibold))
@@ -238,22 +230,22 @@ struct SkyBuddiesWidgetEntryView: View {
                         .lineLimit(1)
                 }
 
-                HStack(alignment: .bottom, spacing: 8) {
-                    Text(entry.emoji)
-                        .font(.system(size: 46))
+                HStack(alignment: .center, spacing: 6) {
+                    WeatherCharacterView(type: entry.characterType, size: 58)
+                        .frame(width: 58, height: 58)
                     VStack(alignment: .leading, spacing: 1) {
                         Text("\(entry.temperature)°")
-                            .font(.system(size: 38, weight: .black, design: .rounded))
+                            .font(.system(size: 36, weight: .black, design: .rounded))
                             .foregroundColor(.white)
                         Text(entry.description)
-                            .font(.system(size: 12, weight: .medium))
+                            .font(.system(size: 11, weight: .medium))
                             .foregroundColor(.white.opacity(0.8))
                             .lineLimit(1)
                     }
                 }
 
                 Text("\(entry.minTemp)° / \(entry.maxTemp)°")
-                    .font(.system(size: 13, weight: .semibold))
+                    .font(.system(size: 12, weight: .semibold))
                     .foregroundColor(.white.opacity(0.65))
             }
             .frame(maxWidth: .infinity, alignment: .leading)
@@ -263,6 +255,7 @@ struct SkyBuddiesWidgetEntryView: View {
                 .frame(width: 1)
                 .padding(.vertical, 8)
 
+            // Right: stats
             VStack(alignment: .leading, spacing: 10) {
                 statRow(icon: "humidity.fill", value: "\(entry.humidity)%", color: Color(hex: "7EC8FF"))
                 statRow(icon: "wind", value: "\(entry.windSpeed) м/с", color: .white)
@@ -271,7 +264,7 @@ struct SkyBuddiesWidgetEntryView: View {
             .frame(width: 110)
             .padding(.leading, 14)
         }
-        .padding(16)
+        .padding(14)
     }
 
     func statRow(icon: String, value: String, color: Color) -> some View {
@@ -284,19 +277,5 @@ struct SkyBuddiesWidgetEntryView: View {
                 .font(.system(size: 13, weight: .semibold))
                 .foregroundColor(.white)
         }
-    }
-}
-
-// MARK: - Color helper
-
-extension Color {
-    init(hex: String) {
-        let hex = hex.trimmingCharacters(in: CharacterSet.alphanumerics.inverted)
-        var int: UInt64 = 0
-        Scanner(string: hex).scanHexInt64(&int)
-        let r = Double((int >> 16) & 0xFF) / 255
-        let g = Double((int >> 8)  & 0xFF) / 255
-        let b = Double( int        & 0xFF) / 255
-        self.init(.sRGB, red: r, green: g, blue: b, opacity: 1)
     }
 }
