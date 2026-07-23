@@ -111,6 +111,8 @@ struct CurrentWeather {
     var characterType: WeatherCharacterType {
         weatherCode.characterType(temperature: temperature)
     }
+
+    var pressureMmHg: Int { Int((pressure * 0.750062).rounded()) }
 }
 
 struct WeatherData {

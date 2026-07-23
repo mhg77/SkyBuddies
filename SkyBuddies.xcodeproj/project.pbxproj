@@ -6,6 +6,12 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		2718A0CC3012388B005A4135 /* WidgetKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2718A0CB3012388B005A4135 /* WidgetKit.framework */; };
+		2718A0CE3012388B005A4135 /* SwiftUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2718A0CD3012388B005A4135 /* SwiftUI.framework */; };
+		2718A0DB3012388E005A4135 /* SkyBuddiesWidgetExtension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 2718A0C93012388B005A4135 /* SkyBuddiesWidgetExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+/* End PBXBuildFile section */
+
 /* Begin PBXContainerItemProxy section */
 		2718A0A330121489005A4135 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -21,13 +27,48 @@
 			remoteGlobalIDString = 2718A09430121487005A4135;
 			remoteInfo = SkyBuddies;
 		};
+		2718A0D93012388E005A4135 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 2718A08D30121487005A4135 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 2718A0C83012388B005A4135;
+			remoteInfo = SkyBuddiesWidgetExtension;
+		};
 /* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		2718A0E03012388E005A4135 /* Embed Foundation Extensions */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 13;
+			files = (
+				2718A0DB3012388E005A4135 /* SkyBuddiesWidgetExtension.appex in Embed Foundation Extensions */,
+			);
+			name = "Embed Foundation Extensions";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		2718A09530121487005A4135 /* SkyBuddies.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SkyBuddies.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		2718A0A230121489005A4135 /* SkyBuddiesTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SkyBuddiesTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		2718A0AC30121489005A4135 /* SkyBuddiesUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SkyBuddiesUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		2718A0C93012388B005A4135 /* SkyBuddiesWidgetExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = SkyBuddiesWidgetExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		2718A0CB3012388B005A4135 /* WidgetKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WidgetKit.framework; path = System/Library/Frameworks/WidgetKit.framework; sourceTree = SDKROOT; };
+		2718A0CD3012388B005A4135 /* SwiftUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftUI.framework; path = System/Library/Frameworks/SwiftUI.framework; sourceTree = SDKROOT; };
+		2718A0E230123964005A4135 /* SkyBuddiesWidgetExtension.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = SkyBuddiesWidgetExtension.entitlements; sourceTree = "<group>"; };
 /* End PBXFileReference section */
+
+/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		2718A0DC3012388E005A4135 /* Exceptions for "SkyBuddiesWidget" folder in "SkyBuddiesWidgetExtension" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Info.plist,
+			);
+			target = 2718A0C83012388B005A4135 /* SkyBuddiesWidgetExtension */;
+		};
+/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		2718A09730121487005A4135 /* SkyBuddies */ = {
@@ -43,6 +84,14 @@
 		2718A0AF30121489005A4135 /* SkyBuddiesUITests */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			path = SkyBuddiesUITests;
+			sourceTree = "<group>";
+		};
+		2718A0CF3012388B005A4135 /* SkyBuddiesWidget */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				2718A0DC3012388E005A4135 /* Exceptions for "SkyBuddiesWidget" folder in "SkyBuddiesWidgetExtension" target */,
+			);
+			path = SkyBuddiesWidget;
 			sourceTree = "<group>";
 		};
 /* End PBXFileSystemSynchronizedRootGroup section */
@@ -69,15 +118,27 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		2718A0C63012388B005A4135 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				2718A0CE3012388B005A4135 /* SwiftUI.framework in Frameworks */,
+				2718A0CC3012388B005A4135 /* WidgetKit.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
 		2718A08C30121487005A4135 = {
 			isa = PBXGroup;
 			children = (
+				2718A0E230123964005A4135 /* SkyBuddiesWidgetExtension.entitlements */,
 				2718A09730121487005A4135 /* SkyBuddies */,
 				2718A0A530121489005A4135 /* SkyBuddiesTests */,
 				2718A0AF30121489005A4135 /* SkyBuddiesUITests */,
+				2718A0CF3012388B005A4135 /* SkyBuddiesWidget */,
+				2718A0CA3012388B005A4135 /* Frameworks */,
 				2718A09630121487005A4135 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -88,8 +149,18 @@
 				2718A09530121487005A4135 /* SkyBuddies.app */,
 				2718A0A230121489005A4135 /* SkyBuddiesTests.xctest */,
 				2718A0AC30121489005A4135 /* SkyBuddiesUITests.xctest */,
+				2718A0C93012388B005A4135 /* SkyBuddiesWidgetExtension.appex */,
 			);
 			name = Products;
+			sourceTree = "<group>";
+		};
+		2718A0CA3012388B005A4135 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				2718A0CB3012388B005A4135 /* WidgetKit.framework */,
+				2718A0CD3012388B005A4135 /* SwiftUI.framework */,
+			);
+			name = Frameworks;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -102,10 +173,12 @@
 				2718A09130121487005A4135 /* Sources */,
 				2718A09230121487005A4135 /* Frameworks */,
 				2718A09330121487005A4135 /* Resources */,
+				2718A0E03012388E005A4135 /* Embed Foundation Extensions */,
 			);
 			buildRules = (
 			);
 			dependencies = (
+				2718A0DA3012388E005A4135 /* PBXTargetDependency */,
 			);
 			fileSystemSynchronizedGroups = (
 				2718A09730121487005A4135 /* SkyBuddies */,
@@ -163,6 +236,28 @@
 			productReference = 2718A0AC30121489005A4135 /* SkyBuddiesUITests.xctest */;
 			productType = "com.apple.product-type.bundle.ui-testing";
 		};
+		2718A0C83012388B005A4135 /* SkyBuddiesWidgetExtension */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 2718A0DD3012388E005A4135 /* Build configuration list for PBXNativeTarget "SkyBuddiesWidgetExtension" */;
+			buildPhases = (
+				2718A0C53012388B005A4135 /* Sources */,
+				2718A0C63012388B005A4135 /* Frameworks */,
+				2718A0C73012388B005A4135 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			fileSystemSynchronizedGroups = (
+				2718A0CF3012388B005A4135 /* SkyBuddiesWidget */,
+			);
+			name = SkyBuddiesWidgetExtension;
+			packageProductDependencies = (
+			);
+			productName = SkyBuddiesWidgetExtension;
+			productReference = 2718A0C93012388B005A4135 /* SkyBuddiesWidgetExtension.appex */;
+			productType = "com.apple.product-type.app-extension";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -184,6 +279,9 @@
 						CreatedOnToolsVersion = 26.6;
 						TestTargetID = 2718A09430121487005A4135;
 					};
+					2718A0C83012388B005A4135 = {
+						CreatedOnToolsVersion = 26.6;
+					};
 				};
 			};
 			buildConfigurationList = 2718A09030121487005A4135 /* Build configuration list for PBXProject "SkyBuddies" */;
@@ -203,6 +301,7 @@
 				2718A09430121487005A4135 /* SkyBuddies */,
 				2718A0A130121489005A4135 /* SkyBuddiesTests */,
 				2718A0AB30121489005A4135 /* SkyBuddiesUITests */,
+				2718A0C83012388B005A4135 /* SkyBuddiesWidgetExtension */,
 			);
 		};
 /* End PBXProject section */
@@ -223,6 +322,13 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 		2718A0AA30121489005A4135 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		2718A0C73012388B005A4135 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -253,6 +359,13 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		2718A0C53012388B005A4135 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
@@ -265,6 +378,11 @@
 			isa = PBXTargetDependency;
 			target = 2718A09430121487005A4135 /* SkyBuddies */;
 			targetProxy = 2718A0AD30121489005A4135 /* PBXContainerItemProxy */;
+		};
+		2718A0DA3012388E005A4135 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 2718A0C83012388B005A4135 /* SkyBuddiesWidgetExtension */;
+			targetProxy = 2718A0D93012388E005A4135 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -395,6 +513,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = SkyBuddies/SkyBuddies.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 3253F3AX7M;
@@ -428,6 +547,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = SkyBuddies/SkyBuddies.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 3253F3AX7M;
@@ -540,6 +660,70 @@
 			};
 			name = Release;
 		};
+		2718A0DE3012388E005A4135 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_WIDGET_BACKGROUND_COLOR_NAME = WidgetBackground;
+				CODE_SIGN_ENTITLEMENTS = SkyBuddiesWidgetExtension.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 3253F3AX7M;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = SkyBuddiesWidget/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = SkyBuddiesWidget;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				IPHONEOS_DEPLOYMENT_TARGET = 17.6;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = ru.hashier.SkyBuddies.SkyBuddiesWidget;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		2718A0DF3012388E005A4135 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_WIDGET_BACKGROUND_COLOR_NAME = WidgetBackground;
+				CODE_SIGN_ENTITLEMENTS = SkyBuddiesWidgetExtension.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 3253F3AX7M;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = SkyBuddiesWidget/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = SkyBuddiesWidget;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				IPHONEOS_DEPLOYMENT_TARGET = 17.6;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = ru.hashier.SkyBuddies.SkyBuddiesWidget;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -575,6 +759,15 @@
 			buildConfigurations = (
 				2718A0BD30121489005A4135 /* Debug */,
 				2718A0BE30121489005A4135 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		2718A0DD3012388E005A4135 /* Build configuration list for PBXNativeTarget "SkyBuddiesWidgetExtension" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				2718A0DE3012388E005A4135 /* Debug */,
+				2718A0DF3012388E005A4135 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

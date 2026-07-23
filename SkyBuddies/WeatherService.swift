@@ -24,7 +24,7 @@ class WeatherService {
         &hourly=temperature_2m,precipitation_probability,weather_code,wind_speed_10m,precipitation\
         &daily=weather_code,temperature_2m_max,temperature_2m_min,sunrise,sunset,precipitation_sum,\
         wind_speed_10m_max\
-        &timezone=auto&forecast_days=16
+        &timezone=auto&forecast_days=35
         """
 
         guard let url = URL(string: urlString) else {

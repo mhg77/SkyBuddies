@@ -1,4 +1,5 @@
 import SwiftUI
+import UIKit
 
 struct ContentView: View {
     @State private var service = WeatherService()
@@ -86,7 +87,10 @@ struct ContentView: View {
 
     var headerView: some View {
         HStack {
-            Button { withAnimation { showSearch = true } } label: {
+            Button {
+                UIImpactFeedbackGenerator(style: .medium).impactOccurred()
+                withAnimation { showSearch = true }
+            } label: {
                 HStack(spacing: 7) {
                     Image(systemName: "location.fill")
                         .font(.system(size: 13, weight: .semibold))
@@ -138,7 +142,7 @@ struct ContentView: View {
                 Rectangle().fill(Color.white.opacity(0.25)).frame(width: 1, height: 38)
                 statCell(icon: "wind", value: "\(Int(data.current.windSpeed)) м/с", label: "Ветер", iconColor: .white)
                 Rectangle().fill(Color.white.opacity(0.25)).frame(width: 1, height: 38)
-                statCell(icon: "gauge.medium", value: "\(Int(data.current.pressure))", label: "гПа", iconColor: Color(hex: "A0D4FF"))
+                statCell(icon: "gauge.medium", value: "\(data.current.pressureMmHg)", label: "мм рт.ст.", iconColor: Color(hex: "A0D4FF"))
             }
             .padding(.vertical, 12)
             .background(.ultraThinMaterial.opacity(0.6))
@@ -170,6 +174,7 @@ struct ContentView: View {
         return HStack(spacing: 4) {
             ForEach(labels.indices, id: \.self) { i in
                 Button {
+                    UIImpactFeedbackGenerator(style: .light).impactOccurred()
                     withAnimation(.spring(duration: 0.26)) { selectedTab = i }
                 } label: {
                     Text(labels[i])
@@ -318,6 +323,10 @@ struct ContentView: View {
     private func selectCity(_ city: GeocodingResult) {
         cityName = city.name; latitude = city.latitude; longitude = city.longitude
         searchQuery = ""; service.searchResults = []
+        let defaults = UserDefaults(suiteName: "group.ru.hashier.SkyBuddies") ?? .standard
+        defaults.set(city.name, forKey: "sb_widget_city")
+        defaults.set(city.latitude, forKey: "sb_widget_lat")
+        defaults.set(city.longitude, forKey: "sb_widget_lon")
         withAnimation { showSearch = false }
         Task { await service.fetchWeather(latitude: latitude, longitude: longitude, cityName: cityName) }
     }
@@ -449,7 +458,10 @@ struct WeekView: View {
         ScrollView(showsIndicators: false) {
             VStack(spacing: 8) {
                 ForEach(days) { day in
-                    Button { selectedDay = day } label: {
+                    Button {
+                        UIImpactFeedbackGenerator(style: .medium).impactOccurred()
+                        selectedDay = day
+                    } label: {
                         WeekDayRow(day: day)
                     }
                     .buttonStyle(.plain)
@@ -515,7 +527,10 @@ struct MonthView: View {
         ScrollView(showsIndicators: false) {
             VStack(spacing: 5) {
                 ForEach(data.daily) { day in
-                    Button { selectedDay = day } label: {
+                    Button {
+                        UIImpactFeedbackGenerator(style: .medium).impactOccurred()
+                        selectedDay = day
+                    } label: {
                         MonthDayRow(day: day, allDays: data.daily)
                     }
                     .buttonStyle(.plain)
