@@ -1,6 +1,5 @@
 import Foundation
 
-// WMO Weather Interpretation Codes
 enum WeatherCode: Int {
     case clearSky = 0
     case mainlyClear = 1
@@ -61,13 +60,19 @@ enum WeatherCode: Int {
         }
     }
 
+    func characterType(temperature: Double) -> WeatherCharacterType {
+        let base = characterType
+        if base == .sunny && temperature > 32 { return .hotSun }
+        return base
+    }
+
     static func from(code: Int) -> WeatherCode {
         WeatherCode(rawValue: code) ?? .clearSky
     }
 }
 
-enum WeatherCharacterType {
-    case sunny, partlyCloudy, cloudy, foggy, rainy, heavyRain, snowy, stormy
+enum WeatherCharacterType: Equatable {
+    case sunny, hotSun, partlyCloudy, cloudy, foggy, rainy, heavyRain, snowy, stormy
 }
 
 struct HourlyWeather: Identifiable {
@@ -102,6 +107,10 @@ struct CurrentWeather {
     let pressure: Double
     let visibility: Double
     let uvIndex: Double
+
+    var characterType: WeatherCharacterType {
+        weatherCode.characterType(temperature: temperature)
+    }
 }
 
 struct WeatherData {
