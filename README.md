@@ -65,15 +65,6 @@ Tap any row in Week or Month view to open a bottom sheet with:
 
 ---
 
-## Getting Started
-
-1. Clone the repo
-2. Open `SkyBuddies.xcodeproj` in Xcode 16+
-3. Select a simulator or device running iOS 17+
-4. Build & run — no API keys or configuration needed
-
----
-
 ## Architecture
 
 ```
@@ -101,7 +92,3 @@ Powered by [Open-Meteo](https://open-meteo.com) — an open-source weather API w
 - No registration or API key required
 
 ---
-
-## License
-
-MIT
